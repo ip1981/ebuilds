@@ -49,7 +49,7 @@ src_install() {
 	use doc && dodoc cuba.pdf ChangeLog
 	if use examples; then
 		insinto /usr/share/doc/${PF}
-	doins -r demo
+		doins -r demo
 	fi
 	insinto /usr/include
 	doins cuba.h
