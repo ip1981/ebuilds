@@ -12,7 +12,7 @@ LICENSE="LGPL"
 SRC_URI="http://www.feynarts.de/cuba/Cuba-${PV}.tar.gz"
 S=${WORKDIR}/Cuba-${PV}
 
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~x86"
 IUSE="+static-libs +shared-libs doc examples"
 SLOT="0"
 
