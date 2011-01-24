@@ -5,7 +5,7 @@
 EAPI=2
 inherit eutils autotools subversion
 
-DESCRIPTION="The open scientific computation system (Axiom fork)"
+DESCRIPTION="The open computer algebra system (Axiom fork)"
 HOMEPAGE="http://open-axiom.org"
 ESVN_REPO_URI="https://open-axiom.svn.sf.net/svnroot/open-axiom/trunk"
 ESVN_PROJECT="open-axiom"
@@ -14,44 +14,81 @@ SRC_URI=""
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-# Failed to build with -static-libs
-IUSE="+sbcl -clisp X threads"
+LISPS=( sbcl clisp gcl ecls clozurecl )
+CONF=(   .     .    .  ecl     ccl    )
+IUSE="${LISPS[*]} X threads"
 
-RDEPEND="X? ( x11-libs/libXpm x11-libs/libXau x11-libs/libSM x11-libs/libxcb
-x11-libs/libXdmcp x11-libs/libICE )
-sbcl?  ( >=dev-lisp/sbcl-1.0.22 )
-clisp? ( >=dev-lisp/clisp-2.47 )"
-
+RDEPEND="X? ( x11-libs/libXpm
+x11-libs/libXau
+x11-libs/libSM
+x11-libs/libxcb
+x11-libs/libXdmcp
+x11-libs/libICE )"
 
 DEPEND="${RDEPEND}
-app-text/noweb"
+app-text/noweb
+sbcl?      ( >=dev-lisp/sbcl-1.0.22 !=dev-lisp/sbcl-1.0.29 )
+clisp?     ( >=dev-lisp/clisp-1.44 )
+gcl?       ( || ( =dev-lisp/gcl-2.6.7 =dev-lisp/gcl-2.6.8 ) )
+ecls?      ( >=dev-lisp/ecls-0.9l  )
+clozurecl? ( >=dev-lisp/clozurecl-1.3 )"
+
+choose_lisp() {
+	if [ 1 != 2 ]; then
+		echo ${CONF[$1]}
+	else
+		echo ${LISPS[$1]}
+	fi
+}
+
+pkg_setup() {
+	local l n i
+	LISP=''
+	n=${#LISPS[*]}
+	for ((i=0; i < n; i++)); do
+		if use ${LISPS[$i]}; then
+			if [ -z "$LISP" ]; then
+				l=${LISPS[$i]}
+				LISP=$(choose_lisp $i)
+			else
+				ewarn "Only one lisp can be used and it will be $l."
+				ewarn "Check your USE flags."
+				epause 5
+			fi
+		fi
+	done
+	if [ -z "$LISP" ]; then
+		LISP=$(choose_lisp 0)
+		ewarn "No lisp platform specified."
+		ewarn "Chosing ${LISPS[0]} as default."
+		ewarn "Building OpenAxiom may fail due to loosing dependecies."
+		epause 5
+	fi
+}
 
 src_prepare() {
 	eautoreconf
 }
 
 src_configure() {
-	if use sbcl && ! use clisp; then
-		lisp=sbcl
-	elif use clisp && ! use sbcl; then
-		lisp=clisp
-	else
-		die "Must use sbcl OR clisp"
-	fi
-
 	econf \
 		$(use_with X x) \
-		--with-lisp=$lisp \
+		$(use_enable gcl gcl) \
+		--with-lisp=$LISP \
 		$(use_enable threads threads) \
 		|| die "econf failed"
 }
 
 src_compile() {
+	# Parallel make broken
 	emake -j1 || die "emake failed"
+	echo
 }
 
 src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 	dodoc ChangeLog* NEWS README AUTHORS MAINTAINERS TODO STYLES INSTALL
+	doicon ${FILESDIR}/open-axiom.png
+	make_desktop_entry open-axiom OpenAxiom open-axiom || die
 }
 
