@@ -16,7 +16,15 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 LISPS=( sbcl clisp gcl ecls clozurecl )
 CONF=(   .     .    .  ecl     ccl    )
-IUSE="${LISPS[*]} X threads"
+
+# The first lisp is default
+IUSE="X threads +${LISPS[0]}"
+n=${#LISPS[*]}
+for ((i=1; i < n; i++)); do
+	IUSE="$IUSE -${LISPS[$i]}"
+done
+
+
 
 RDEPEND="X? ( x11-libs/libXpm
 x11-libs/libXau
