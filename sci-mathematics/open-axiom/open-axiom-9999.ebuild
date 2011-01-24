@@ -42,7 +42,7 @@ ecls?      ( >=dev-lisp/ecls-0.9l  )
 clozurecl? ( >=dev-lisp/clozurecl-1.3 )"
 
 choose_lisp() {
-	if [ 1 != 2 ]; then
+	if [ ${CONF[$1]} != '.' ]; then
 		echo ${CONF[$1]}
 	else
 		echo ${LISPS[$1]}
@@ -90,13 +90,18 @@ src_configure() {
 src_compile() {
 	# Parallel make broken
 	emake -j1 || die "emake failed"
-	echo
+
 }
 
 src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 	dodoc ChangeLog* NEWS README AUTHORS MAINTAINERS TODO STYLES INSTALL
 	doicon ${FILESDIR}/open-axiom.png
-	make_desktop_entry open-axiom OpenAxiom open-axiom || die
+	make_desktop_entry \
+		open-axiom \
+		OpenAxiom \
+		open-axiom \
+		"" \
+		"Terminal=true"
 }
 
