@@ -14,7 +14,7 @@ SRC_URI=""
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-LISPS='sbcl clisp gcl ecls clozurecl'
+LISPS='sbcl clisp ecls clozurecl'
 REQUIRED_USE="^^ ( $LISPS )"
 
 # The first lisp is default
@@ -33,8 +33,7 @@ DEPEND="${RDEPEND}
 app-text/noweb
 sbcl?      ( >=dev-lisp/sbcl-1.0.22 !=dev-lisp/sbcl-1.0.29 )
 clisp?     ( >=dev-lisp/clisp-1.44 )
-gcl?       ( || ( =dev-lisp/gcl-2.6.7 =dev-lisp/gcl-2.6.8 ) )
-ecls?      ( >=dev-lisp/ecls-0.9l  )
+ecls?      ( >=dev-lisp/ecls-11.1.1  )
 clozurecl? ( >=dev-lisp/clozurecl-1.3 )"
 
 
@@ -58,6 +57,7 @@ src_configure() {
 		$(use_with X x) \
 		--disable-gcl \
 		--with-lisp=$lisp \
+		--with-gnu-ld \
 		$(use_enable threads threads) \
 		|| die "econf failed"
 }

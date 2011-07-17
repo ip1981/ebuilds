@@ -1,0 +1,13 @@
+# ChangeLog for sci-mathematics/open-axiom
+# Copyright 1999-2011 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+*open-axiom-9999 (17 Jul 2011)
+
+  17 Jul 2011; Igor Pashev <pashev.igor@gmail.com> open-axiom-9999.ebuild,
+  ChangeLog :
+  + Added ChangeLog
+  + Added --with-gnu-ld (otherwise SBCL fails)
+  ! Bumped ECL minimal version
+  - Removed GCL support
+
