@@ -42,7 +42,7 @@ src_prepare() {
 }
 
 src_configure() {
-	local l, lisp;
+	local l lisp;
 	for l in $LISPS; do
 		use $l && break;
 	done
