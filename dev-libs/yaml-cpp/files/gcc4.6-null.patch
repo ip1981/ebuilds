@@ -1,0 +1,24 @@
+Index: yaml-cpp/src/ptr_vector.h
+===================================================================
+--- yaml-cpp.orig/src/ptr_vector.h
++++ yaml-cpp/src/ptr_vector.h
+@@ -8,6 +8,7 @@
+ #include "yaml-cpp/noncopyable.h"
+ #include <memory>
+ #include <vector>
++#include <cstdlib>
+ 
+ namespace YAML {
+ 	
+Index: yaml-cpp/src/ptr_stack.h
+===================================================================
+--- yaml-cpp.orig/src/ptr_stack.h
++++ yaml-cpp/src/ptr_stack.h
+@@ -8,6 +8,7 @@
+ #include "yaml-cpp/noncopyable.h"
+ #include <memory>
+ #include <vector>
++#include <cstdlib>
+ 
+ template <typename T>
+ class ptr_stack: private YAML::noncopyable
