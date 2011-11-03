@@ -1,0 +1,155 @@
+diff -dubr Cuba-3.0.orig/makefile.in Cuba-3.0/makefile.in
+--- Cuba-3.0.orig/makefile.in	2011-11-04 00:22:53.000000000 +0400
++++ Cuba-3.0/makefile.in	2011-11-04 00:30:37.000000000 +0400
+@@ -1,5 +1,5 @@
+ CC = @CC@
+-CFLAGS = @CFLAGS@ @DEFS@ -I$(common) -I. -I$(srcdir)
++CFLAGS = @CFLAGS@ @DEFS@ -I$(common) -I. -I$(srcdir) -fPIC
+ MCFLAGS = @MCFLAGS@
+ F77 = @F77@
+ FFLAGS = @FFLAGS@
+@@ -9,6 +9,7 @@
+ INSTALL_PROGRAM = @INSTALL_PROGRAM@
+ RANLIB = @RANLIB@
+ EXE = @EXEEXT@
++VERSION = @PACKAGE_VERSION@
+ 
+ prefix = @prefix@
+ exec_prefix = @exec_prefix@
+@@ -31,13 +32,14 @@
+ 
+ HEADERS = cuba.h
+ LIB = libcuba.a
++SHLIB = libcuba.so.$(VERSION).0
+ MATH = Vegas$(EXE) Suave$(EXE) Divonne$(EXE) Cuhre$(EXE)
+ TOOLS = partview$(EXE)
+ 
+ 
+ all: lib demos $(MATH_DEFAULT) $(TOOLS_DEFAULT)
+ 
+-lib: $(LIB)
++lib: $(LIB) $(SHLIB)
+ 
+ demos: demo-c$(EXE) $(DEMO_FORTRAN_DEFAULT)
+ 
+@@ -92,26 +94,21 @@
+ $(LIB)(Vegas.o): $(VEGAS_C) $(VEGAS_DEPS) $(COMMON_CDEPS) 
+ 	$(CC) $(CFLAGS) -I$(vegas) -DNOUNDERSCORE -c -o Vegas.o $(VEGAS_C)
+ 	$(AR) $(ARFLAGS) $(LIB) Vegas.o
+-	$(RM) Vegas.o
+ 
+ $(LIB)(llVegas.o): $(VEGAS_C) $(VEGAS_DEPS) $(COMMON_CDEPS)
+ 	$(CC) $(CFLAGS) -I$(vegas) -DLONGLONGINT -DNOUNDERSCORE -c -o llVegas.o $(VEGAS_C)
+ 	$(AR) $(ARFLAGS) $(LIB) llVegas.o
+-	$(RM) llVegas.o
+ 
+ $(LIB)(Vegas_.o): $(VEGAS_C) $(VEGAS_DEPS) $(COMMON_CDEPS)
+ 	$(CC) $(CFLAGS) -I$(vegas) -c -o Vegas_.o $(VEGAS_C)
+ 	$(AR) $(ARFLAGS) $(LIB) Vegas_.o
+-	$(RM) Vegas_.o
+ 
+ $(LIB)(llVegas_.o): $(VEGAS_C) $(VEGAS_DEPS) $(COMMON_CDEPS)
+ 	$(CC) $(CFLAGS) -I$(vegas) -DLONGLONGINT -c -o llVegas_.o $(VEGAS_C)
+ 	$(AR) $(ARFLAGS) $(LIB) llVegas_.o
+-	$(RM) llVegas_.o
+ 
+ Vegas$(EXE): $(VEGAS_TM) $(VEGAS_DEPS) $(COMMON_TMDEPS)
+ 	$(MCC) $(MCFLAGS) $(CFLAGS) -I$(vegas) -o Vegas$(EXE) $(VEGAS_TM)
+-	strip Vegas$(EXE)
+ 
+ 
+ SUAVE_C = $(suave)/Suave.c
+@@ -125,26 +122,21 @@
+ $(LIB)(Suave.o): $(SUAVE_C) $(SUAVE_DEPS) $(COMMON_CDEPS)
+ 	$(CC) $(CFLAGS) -I$(suave) -DNOUNDERSCORE -c -o Suave.o $(SUAVE_C)
+ 	$(AR) $(ARFLAGS) $(LIB) Suave.o
+-	$(RM) Suave.o
+ 
+ $(LIB)(llSuave.o): $(SUAVE_C) $(SUAVE_DEPS) $(COMMON_CDEPS)
+ 	$(CC) $(CFLAGS) -I$(suave) -DLONGLONGINT -DNOUNDERSCORE -c -o llSuave.o $(SUAVE_C)
+ 	$(AR) $(ARFLAGS) $(LIB) llSuave.o
+-	$(RM) llSuave.o
+ 
+ $(LIB)(Suave_.o): $(SUAVE_C) $(SUAVE_DEPS) $(COMMON_CDEPS)
+ 	$(CC) $(CFLAGS) -I$(suave) -c -o Suave_.o $(SUAVE_C)
+ 	$(AR) $(ARFLAGS) $(LIB) Suave_.o
+-	$(RM) Suave_.o
+ 
+ $(LIB)(llSuave_.o): $(SUAVE_C) $(SUAVE_DEPS) $(COMMON_CDEPS)
+ 	$(CC) $(CFLAGS) -I$(suave) -DLONGLONGINT -c -o llSuave_.o $(SUAVE_C)
+ 	$(AR) $(ARFLAGS) $(LIB) llSuave_.o
+-	$(RM) llSuave_.o
+ 
+ Suave$(EXE): $(SUAVE_TM) $(SUAVE_DEPS) $(COMMON_TMDEPS)
+ 	$(MCC) $(MCFLAGS) $(CFLAGS) -I$(suave) -o Suave$(EXE) $(SUAVE_TM)
+-	strip Suave$(EXE)
+ 
+ 
+ DIVONNE_C = $(divonne)/Divonne.c
+@@ -159,26 +151,21 @@
+ $(LIB)(Divonne.o): $(DIVONNE_C) $(DIVONNE_DEPS) $(COMMON_CDEPS)
+ 	$(CC) $(CFLAGS) -I$(divonne) -DNOUNDERSCORE -c -o Divonne.o $(DIVONNE_C)
+ 	$(AR) $(ARFLAGS) $(LIB) Divonne.o
+-	$(RM) Divonne.o
+ 
+ $(LIB)(llDivonne.o): $(DIVONNE_C) $(DIVONNE_DEPS) $(COMMON_CDEPS)
+ 	$(CC) $(CFLAGS) -I$(divonne) -DLONGLONGINT -DNOUNDERSCORE -c -o llDivonne.o $(DIVONNE_C)
+ 	$(AR) $(ARFLAGS) $(LIB) llDivonne.o
+-	$(RM) llDivonne.o
+ 
+ $(LIB)(Divonne_.o): $(DIVONNE_C) $(DIVONNE_DEPS) $(COMMON_CDEPS)
+ 	$(CC) $(CFLAGS) -I$(divonne) -c -o Divonne_.o $(DIVONNE_C)
+ 	$(AR) $(ARFLAGS) $(LIB) Divonne_.o
+-	$(RM) Divonne_.o
+ 
+ $(LIB)(llDivonne_.o): $(DIVONNE_C) $(DIVONNE_DEPS) $(COMMON_CDEPS)
+ 	$(CC) $(CFLAGS) -I$(divonne) -DLONGLONGINT -c -o llDivonne_.o $(DIVONNE_C)
+ 	$(AR) $(ARFLAGS) $(LIB) llDivonne_.o
+-	$(RM) llDivonne_.o
+ 
+ Divonne$(EXE): $(DIVONNE_TM) $(DIVONNE_DEPS) $(COMMON_TMDEPS)
+ 	$(MCC) $(MCFLAGS) $(CFLAGS) -I$(divonne) -o Divonne$(EXE) $(DIVONNE_TM)
+-	strip Divonne$(EXE)
+ 
+ 
+ CUHRE_C = $(cuhre)/Cuhre.c
+@@ -191,26 +178,21 @@
+ $(LIB)(Cuhre.o): $(CUHRE_C) $(CUHRE_DEPS) $(COMMON_CDEPS)
+ 	$(CC) $(CFLAGS) -I$(cuhre) -DNOUNDERSCORE -c -o Cuhre.o $(CUHRE_C)
+ 	$(AR) $(ARFLAGS) $(LIB) Cuhre.o
+-	$(RM) Cuhre.o
+ 
+ $(LIB)(llCuhre.o): $(CUHRE_C) $(CUHRE_DEPS) $(COMMON_CDEPS)
+ 	$(CC) $(CFLAGS) -I$(cuhre) -DLONGLONGINT -DNOUNDERSCORE -c -o llCuhre.o $(CUHRE_C)
+ 	$(AR) $(ARFLAGS) $(LIB) llCuhre.o
+-	$(RM) llCuhre.o
+ 
+ $(LIB)(Cuhre_.o): $(CUHRE_C) $(CUHRE_DEPS) $(COMMON_CDEPS)
+ 	$(CC) $(CFLAGS) -I$(cuhre) -c -o Cuhre_.o $(CUHRE_C)
+ 	$(AR) $(ARFLAGS) $(LIB) Cuhre_.o
+-	$(RM) Cuhre_.o
+ 
+ $(LIB)(llCuhre_.o): $(CUHRE_C) $(CUHRE_DEPS) $(COMMON_CDEPS)
+ 	$(CC) $(CFLAGS) -I$(cuhre) -DLONGLONGINT -c -o llCuhre_.o $(CUHRE_C)
+ 	$(AR) $(ARFLAGS) $(LIB) llCuhre_.o
+-	$(RM) llCuhre_.o
+ 
+ Cuhre$(EXE): $(CUHRE_TM) $(CUHRE_DEPS) $(COMMON_TMDEPS)
+ 	$(MCC) $(MCFLAGS) $(CFLAGS) -I$(cuhre) -o Cuhre$(EXE) $(CUHRE_TM)
+-	strip Cuhre$(EXE)
+ 
+ 
+ $(LIB): $(LIB)(Vegas.o)     $(LIB)(Vegas_.o)     \
+@@ -223,6 +205,11 @@
+ 	$(LIB)(llCuhre.o)   $(LIB)(llCuhre_.o)
+ 	-$(RANLIB) $(LIB)
+ 
++$(SHLIB): $(LIB)
++	$(CC) -shared -Wl,-soname,libcuba.so.$(VERSION) -o $@ *.o
++	ln -sf $(SHLIB) libcuba.so.$(VERSION)
++	ln -sf $(SHLIB) libcuba.so
++
+ 
+ DEMO_F = $(demo)/demo-fortran.F
+ DEMO_C = $(demo)/demo-c.c
+Только в Cuba-3.0.orig: .makefile.in.swp

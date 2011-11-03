@@ -2,9 +2,9 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit eutils distutils
+inherit eutils
 
-EAPI="2"
+EAPI="3"
 
 DESCRIPTION="A library for multidimensional numerical integration"
 HOMEPAGE="http://www.feynarts.de/cuba/"
@@ -19,7 +19,7 @@ SLOT="0"
 
 src_prepare() {
 	if use shared-libs; then
-		epatch "${FILESDIR}/shared.patch"
+		epatch "${FILESDIR}/${PV}-shared.patch"
 	elif use !static-libs; then
 		eerror "Must USE shared-libs or static-libs"
 		die
