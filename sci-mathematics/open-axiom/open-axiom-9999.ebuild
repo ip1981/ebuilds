@@ -30,7 +30,6 @@ x11-libs/libXdmcp
 x11-libs/libICE )"
 
 DEPEND="${RDEPEND}
-app-text/noweb
 sbcl?      ( >=dev-lisp/sbcl-1.0.22 !=dev-lisp/sbcl-1.0.29 )
 clisp?     ( >=dev-lisp/clisp-1.44 )
 ecls?      ( >=dev-lisp/ecls-11.1.1  )
