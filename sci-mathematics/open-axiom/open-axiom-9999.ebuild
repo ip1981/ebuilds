@@ -7,7 +7,7 @@ inherit eutils autotools subversion
 
 DESCRIPTION="The open computer algebra system (Axiom fork)"
 HOMEPAGE="http://open-axiom.org"
-ESVN_REPO_URI="https://open-axiom.svn.sf.net/svnroot/open-axiom/trunk"
+ESVN_REPO_URI="https://open-axiom.svn.sourceforge.net/svnroot/open-axiom/trunk"
 ESVN_PROJECT="open-axiom"
 SRC_URI=""
 
